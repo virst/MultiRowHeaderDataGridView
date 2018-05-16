@@ -22,17 +22,11 @@ namespace WindowsFormsTest
             {
                 //multiRowHeaderDataGridView1.MultiHeader = true;
                 //multiRowHeaderDataGridView1.LevelSeparator = '|';
-                multiRowHeaderDataGridView1.Columns.Add("A", "A");
-                multiRowHeaderDataGridView1.Columns.Add("C", "H|B|C");
-                multiRowHeaderDataGridView1.Columns.Add("G", "H|D|E|G");
-                multiRowHeaderDataGridView1.Columns.Add("Z", "H|D|E|Z");
-                multiRowHeaderDataGridView1.Columns.Add("T", "H|D|T");
+
 
                 this.multiRowHeaderDataGridView1.ColumnHeadersHeightSizeMode =
                     DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
-
-                this.multiRowHeaderDataGridView1.ColumnHeadersHeight =
-                    this.multiRowHeaderDataGridView1.ColumnHeadersHeight * 3;
+               
             }
             catch (Exception ex)
             {

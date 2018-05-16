@@ -36,20 +36,23 @@ namespace MultiDataGridView
 
         private void MultiRowHeaderDataGridView_Paint(object sender, PaintEventArgs e)
         {
-            if (!MultiHeader) return;
 
+            if (!MultiHeader) return;
+            Columns_CollectionChanged(null, null);
             foreach (var m in _mhc)
             {
                 Rectangle r1 = GetCellDisplayRectangle(m.Position.X, -1, true); //get the column header cell
-                r1.Y = (ColumnHeadersHeight + 1) * m.Position.Y;
+                r1.Y = (SingleColumnHeadersHeight + 0) * m.Position.Y;
                 if (m.Position.Y == 0)
                     r1.Y += 1;
                 r1.Width = 0;
                 for (var i = 0; i < m.Position.Width; i++)
                     r1.Width += Columns[i + m.Position.X].Width;
 
-                r1.Height = (ColumnHeadersHeight - 1) * m.Position.Height;
+                r1.Height = (SingleColumnHeadersHeight - 1) * m.Position.Height;
                 r1.Height -= m.Position.Y;
+                if (m.Position.Y == 0)
+                    r1.Height -= 1;
                 r1.Width -= 2;
 
                 e.Graphics.FillRectangle(new SolidBrush(ColumnHeadersDefaultCellStyle.BackColor), r1);
@@ -61,7 +64,6 @@ namespace MultiDataGridView
                     r1,
                     _format);
             }
-
         }
 
         private void MultiRowHeaderDataGridView_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -70,7 +72,7 @@ namespace MultiDataGridView
             {
                 e.PaintBackground(e.CellBounds, false);
                 Rectangle r2 = e.CellBounds;
-                r2.Height = ColumnHeadersHeight * (HeaderLevels - _mhc.TotalHeight(e.ColumnIndex));
+                r2.Height = SingleColumnHeadersHeight * (HeaderLevels - _mhc.TotalHeight(e.ColumnIndex));
                 r2.Y += e.CellBounds.Height - r2.Height;
                 var ss = Columns[e.ColumnIndex].HeaderText.Split(LevelSeparator);
                 e.Graphics.DrawString(ss.Last(),
@@ -86,7 +88,7 @@ namespace MultiDataGridView
 
         void Columns_CollectionChanged(object sender, CollectionChangeEventArgs e)
         {
-            _mhc.Clear(); _maxH = 0;
+           _mhc.Clear(); _maxH = 0;
             if (!MultiHeader) return;
             string[] ss1 = null;
             for (var i = 0; i < ColumnCount; i++)
@@ -125,10 +127,9 @@ namespace MultiDataGridView
             }
         }        
 
-        public new int ColumnHeadersHeight
+        private int SingleColumnHeadersHeight
         {
             get { return base.ColumnHeadersHeight / HeaderLevels; }
-            set { base.ColumnHeadersHeight = value * HeaderLevels;}
         }
 
         private int HeaderLevels
